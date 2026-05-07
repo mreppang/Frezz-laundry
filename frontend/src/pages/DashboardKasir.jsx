@@ -1,0 +1,92 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import api from '../utils/api';
+import { PlusCircle, ListOrdered, Clock, CheckCircle } from 'lucide-react';
+import '../styles/shared.css';
+
+const STATUS = {
+  belum_selesai: { label: 'Belum Selesai', cls: 'badge-amber' },
+  siap_diambil:  { label: 'Siap Diambil',  cls: 'badge-emerald' },
+  selesai:       { label: 'Selesai',        cls: 'badge-indigo' },
+};
+
+export default function DashboardKasir() {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    api.get('/api/laporan/dashboard').then(r => setStats(r.data)).catch(() => {});
+  }, []);
+
+  return (
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">Dashboard Kasir</h1>
+        <p className="page-subtitle">Ringkasan aktivitas hari ini</p>
+      </div>
+
+      {/* Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginBottom: 24 }}>
+        {[
+          { icon: <ListOrdered size={20} />, label: 'Masuk Hari Ini', value: stats?.hariIni ?? '—', color: '#00459a' },
+          { icon: <Clock size={20} />, label: 'Belum Selesai', value: stats?.aktif ?? '—', color: '#d97706' },
+          { icon: <CheckCircle size={20} />, label: 'Selesai', value: stats?.selesai ?? '—', color: '#059669' },
+        ].map(c => (
+          <div key={c.label} className="table-card" style={{ padding: 20, display: 'flex', gap: 16, alignItems: 'center' }}>
+            <div style={{ width: 44, height: 44, borderRadius: 10, background: `${c.color}18`, color: c.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {c.icon}
+            </div>
+            <div>
+              <div style={{ fontSize: 12, color: '#6b7280', fontWeight: 600 }}>{c.label}</div>
+              <div style={{ fontSize: 24, fontWeight: 700, color: c.color }}>{c.value}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Shortcuts */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+        <Link to="/transaksi/baru" className="table-card" style={{ padding: 20, display: 'flex', alignItems: 'center', gap: 14, textDecoration: 'none', transition: 'box-shadow 0.2s' }}>
+          <div style={{ width: 44, height: 44, borderRadius: 10, background: '#00459a', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PlusCircle size={22} />
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, color: '#0d1c2e' }}>Buat Transaksi</div>
+            <div style={{ fontSize: 13, color: '#6b7280' }}>Catat order baru</div>
+          </div>
+        </Link>
+        <Link to="/transaksi" className="table-card" style={{ padding: 20, display: 'flex', alignItems: 'center', gap: 14, textDecoration: 'none' }}>
+          <div style={{ width: 44, height: 44, borderRadius: 10, background: '#0891b218', color: '#0891b2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ListOrdered size={22} />
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, color: '#0d1c2e' }}>Daftar Transaksi</div>
+            <div style={{ fontSize: 13, color: '#6b7280' }}>Lihat & update status</div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Recent */}
+      {stats?.recent?.length > 0 && (
+        <div className="table-card">
+          <div style={{ padding: '16px 24px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontWeight: 700 }}>Transaksi Terbaru</span>
+            <Link to="/transaksi" style={{ color: '#00459a', fontSize: 13 }}>Lihat Semua →</Link>
+          </div>
+          <table>
+            <thead><tr><th>Kode</th><th>Pelanggan</th><th>Layanan</th><th>Status</th></tr></thead>
+            <tbody>
+              {stats.recent.map(row => (
+                <tr key={row.id}>
+                  <td><Link to={`/transaksi/${row.id}`} style={{ color: '#00459a', fontWeight: 600 }}>{row.kode_order}</Link></td>
+                  <td>{row.pelanggan_nama}</td>
+                  <td style={{ textTransform: 'capitalize' }}>{row.layanan} {row.paket === 'express' ? '⚡' : ''}</td>
+                  <td><span className={`badge ${STATUS[row.status]?.cls}`}>{STATUS[row.status]?.label}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
