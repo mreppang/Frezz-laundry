@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import api from '../utils/api';
 
 const AuthContext = createContext(null);
@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
   });
   const [loading, setLoading] = useState(false);
 
+  // Login: panggil API, simpan token & data user
   const login = async (username, password) => {
     setLoading(true);
     try {
@@ -24,10 +25,17 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
+  // Logout: panggil API untuk blacklist token di server, lalu bersihkan storage
+  const logout = async () => {
+    try {
+      await api.post('/api/auth/logout');
+    } catch {
+      // Tetap lanjut logout meski API gagal
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+    }
   };
 
   return (

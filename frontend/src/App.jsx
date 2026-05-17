@@ -43,6 +43,9 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <div className="wave-container">
+        <div className="wave-animation"></div>
+      </div>
     </>
   );
 }

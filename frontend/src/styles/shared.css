@@ -44,18 +44,18 @@
 }
 
 .page-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 24px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px;
   font-weight: 700;
-  color: #0d1c2e;
+  color: #0A192F;
   margin: 0 0 4px;
   letter-spacing: -0.01em;
 }
 
 .page-subtitle {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  color: #424753;
+  font-size: 15px;
+  color: rgba(10, 25, 47, 0.7);
   margin: 0;
 }
 
@@ -71,12 +71,15 @@
 .stat-grid-2 { grid-template-columns: repeat(2, 1fr); }
 
 .stat-card {
-  background: #fff;
-  border: 1px solid #dce9ff;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-top: 3px solid #0288D1;
+  border-radius: 16px;
   padding: 20px 24px;
-  border-top: 3px solid #00459a;
-  transition: box-shadow 0.18s, transform 0.18s;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 10px 30px rgba(2, 136, 209, 0.08);
 }
 
 .stat-card:hover {
@@ -106,10 +109,10 @@
 .stat-card-icon-indigo { background: #e0e7ff; color: #4338ca; }
 
 .stat-value {
-  font-family: 'Inter', sans-serif;
-  font-size: 28px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
   font-weight: 700;
-  color: #0d1c2e;
+  color: #0A192F;
   line-height: 1;
   margin-bottom: 4px;
   font-variant-numeric: tabular-nums;
@@ -117,22 +120,25 @@
 
 .stat-label {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  color: #424753;
+  color: rgba(10, 25, 47, 0.7);
 }
 
 /* Table */
 .table-card {
-  background: #fff;
-  border: 1px solid #dce9ff;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(2, 136, 209, 0.08);
 }
 
 .table-card-header {
   padding: 20px 24px;
-  border-bottom: 1px solid #e6eeff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -141,10 +147,10 @@
 }
 
 .table-card-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
   font-weight: 700;
-  color: #0d1c2e;
+  color: #0A192F;
   margin: 0;
 }
 
@@ -160,8 +166,8 @@ table {
 }
 
 thead th {
-  background: #eff4ff;
-  color: #424753;
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(10, 25, 47, 0.8);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -175,8 +181,8 @@ thead th {
 }
 
 tbody tr {
-  border-bottom: 1px solid #e6eeff;
-  transition: background 0.12s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
 }
 
 tbody tr:last-child {
@@ -184,16 +190,18 @@ tbody tr:last-child {
 }
 
 tbody tr:nth-child(even) {
-  background: #f8fbff;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 tbody tr:hover {
-  background: #eff4ff;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(1.005);
+  box-shadow: 0 4px 12px rgba(2, 136, 209, 0.05);
 }
 
 tbody td {
   padding: 13px 16px;
-  color: #0d1c2e;
+  color: rgba(10, 25, 47, 0.9);
   font-size: 14px;
   vertical-align: middle;
 }
@@ -244,6 +252,11 @@ tbody td {
 /* Spinner */
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@keyframes fadeScaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .spinner {
@@ -532,4 +545,33 @@ tbody td {
 
 @media (max-width: 600px) {
   .stat-grid-4, .stat-grid-3, .stat-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* --- Mobile Responsive Overrides --- */
+@media (max-width: 768px) {
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  div[style*="grid-template-columns: 2fr 1fr 1fr auto"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Ensure form buttons wrap if needed */
+  div[style*="display: flex; gap: 8"] {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  table {
+    min-width: 700px; /* Force table to be wider than screen to enable horizontal scroll */
+  }
+  tbody td, thead th {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  /* Optional: hint to users that table is scrollable */
+  .table-wrapper {
+    position: relative;
+    box-shadow: inset -10px 0 10px -10px rgba(0,0,0,0.1);
+  }
 }

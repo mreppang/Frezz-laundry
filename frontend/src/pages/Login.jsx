@@ -36,9 +36,10 @@ export default function LoginPage() {
       <div className="login-card">
         <div className="login-card-left">
           <div className="login-brand-icon">
-            <img src={logoImg} alt="Frezz Laundry" style={{ width: 52, height: 52, objectFit: 'contain' }} />
+            <img src={logoImg} alt="Frezz Laundry" style={{ width: 80, height: 80, objectFit: 'contain' }} />
           </div>
           <h1 className="login-brand-title">Frezz Laundry</h1>
+          <p className="login-brand-tagline">Fresh • Clean • Express</p>
           <p className="login-brand-sub">
             Sistem manajemen laundry modern. Catat transaksi, pantau cucian, dan kelola bisnis Anda dengan mudah.
           </p>
@@ -118,9 +119,10 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="login-footer-text">
-            Frezz Laundry &copy; 2025 — v1.0
-          </p>
+          <div className="login-footer-text">
+            <img src={logoImg} alt="" style={{ width: 20, height: 20, objectFit: 'contain', opacity: 0.5, verticalAlign: 'middle', marginRight: 6 }} />
+            Frezz Laundry &copy; {new Date().getFullYear()} — v1.0
+          </div>
         </div>
       </div>
     </div>

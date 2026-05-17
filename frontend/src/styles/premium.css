@@ -1,0 +1,123 @@
+/* --- ULTRA PREMIUM LIGHT DESIGN SYSTEM VARIABLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Sky / Sea Blue Light Palette */
+  --oceanic-abyss: #E0F7FA; /* Light Cyan */
+  --deep-wave: #B3E5FC; /* Light Sky Blue */
+  --bioluminescent-gold: #FFB300; /* Warm Accent */
+  --crystal-cyan: #0288D1; /* Strong Blue Accent */
+  
+  /* Background & Texts */
+  --bg-color: var(--oceanic-abyss);
+  --text-primary: #0A192F; /* Deep Navy for text */
+  --text-secondary: rgba(10, 25, 47, 0.7);
+  --text-gold: #0277BD; /* Adjusted to blue for contrast on light */
+  
+  /* Glassmorphism Variables for Light Theme */
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-border-light: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 16px 32px rgba(2, 136, 209, 0.08);
+}
+
+body {
+  background: radial-gradient(circle at top left, var(--deep-wave), var(--oceanic-abyss)) !important;
+  background-attachment: fixed !important;
+  color: var(--text-primary) !important;
+}
+
+h1, h2, h3, h4, .heading-premium {
+  font-family: 'Outfit', sans-serif !important;
+  letter-spacing: -0.02em;
+}
+
+/* --- ULTRA PREMIUM UTILITIES --- */
+
+/* Glass Panel Base */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-light);
+  box-shadow: var(--glass-shadow);
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-panel:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 48px rgba(2, 136, 209, 0.12);
+  border-color: #fff;
+}
+
+/* Monospace Text for Currency / Numbers */
+.number-premium {
+  font-family: 'Space Grotesk', monospace !important;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--text-gold);
+}
+
+/* Button with Ripple / Shimmer Effect */
+.btn-premium {
+  background: linear-gradient(135deg, #0288D1, #01579B);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(2, 136, 209, 0.25);
+}
+
+.btn-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-20deg);
+  transition: all 0.7s ease;
+}
+
+.btn-premium:hover::before {
+  left: 150%;
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(2, 136, 209, 0.35);
+}
+
+/* Background Wavy Animation */
+.wave-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.wave-animation {
+  width: 200%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="%2381D4FA" fill-opacity="0.5" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+  background-size: 50% 100%;
+  animation: wave-move 15s linear infinite;
+}
+
+@keyframes wave-move {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

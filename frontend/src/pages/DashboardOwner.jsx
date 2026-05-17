@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { TrendingUp, ShoppingBag, Clock, CheckCircle2, CalendarCheck } from 'lucide-react';
+import logoImg from '../assets/Logo_Brand.png';
 import '../styles/shared.css';
 
 const fmt = (n) => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
@@ -13,11 +15,13 @@ const STATUS = {
 };
 
 export default function DashboardOwner() {
+  const { user } = useAuth();
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
+    // Backend mengembalikan { message, data: { ... } } — ambil r.data.data
     api.get('/api/laporan/dashboard')
-      .then(r => setStats(r.data))
+      .then(r => setStats(r.data?.data || r.data))
       .catch(() => {});
   }, []);
 
@@ -31,9 +35,32 @@ export default function DashboardOwner() {
 
   return (
     <div>
-      <div className="page-header">
-        <h1 className="page-title">Dashboard Owner</h1>
-        <p className="page-subtitle">Ringkasan performa bisnis Frezz Laundry</p>
+      {/* Branded Welcome Header */}
+      <div style={{
+        background: 'rgba(255,255,255,0.5)',
+        borderRadius: 16,
+        padding: '24px 28px',
+        marginBottom: 24,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 18,
+        border: '1px solid rgba(255,255,255,0.8)',
+        boxShadow: '0 8px 24px rgba(2,136,209,0.06)',
+      }}>
+        <img src={logoImg} alt="Frezz Laundry" style={{
+          width: 52, height: 52, objectFit: 'contain',
+          background: '#fff', borderRadius: 14, padding: 4,
+          boxShadow: '0 4px 16px rgba(2,136,209,0.12)',
+          flexShrink: 0,
+        }} />
+        <div>
+          <h1 style={{ fontFamily: 'Outfit', fontSize: 22, fontWeight: 700, color: '#0A192F', margin: '0 0 2px' }}>
+            Selamat Datang, {user?.username || 'Owner'} 👋
+          </h1>
+          <p style={{ fontFamily: 'Inter', fontSize: 14, color: 'rgba(10,25,47,0.6)', margin: 0 }}>
+            Frezz Laundry — Ringkasan performa bisnis
+          </p>
+        </div>
       </div>
 
       {/* Stat Cards */}
@@ -105,6 +132,13 @@ export default function DashboardOwner() {
           </div>
         </div>
       )}
+
+      {/* Footer watermark */}
+      <div style={{ textAlign: 'center', marginTop: 32, opacity: 0.3, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+        <img src={logoImg} alt="" style={{ width: 18, height: 18, objectFit: 'contain' }} />
+        <span style={{ fontFamily: 'Inter', fontSize: 11, color: '#0A192F' }}>Frezz Laundry Management System</span>
+      </div>
     </div>
   );
 }
+
