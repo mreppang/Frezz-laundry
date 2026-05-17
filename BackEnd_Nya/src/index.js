@@ -59,6 +59,6 @@ app.use((req, res) => {
 // ─────────────────────────────────────────────
 app.use(errorHandler);
 
-app.listen(port, () => {
-    console.log(`✅ Server Frezz Laundry berjalan di http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`✅ Server Frezz Laundry berjalan di 0.0.0.0:${port}`);
 });
