@@ -16,13 +16,20 @@ const port = Number(process.env.PORT) || 5000;
 // MIDDLEWARE GLOBAL
 // ─────────────────────────────────────────────
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        'http://localhost:3000',
-        'https://frezz-laundry.vercel.app',  // production frontend
-        /\.vercel\.app$/,                     // semua subdomain vercel
-    ],
+    origin: function (origin, callback) {
+        // Izinkan request tanpa origin (Postman, curl, server-to-server)
+        if (!origin) return callback(null, true);
+        const allowedOrigins = [
+            'http://localhost:5173',
+            'http://localhost:5174',
+            'http://localhost:3000',
+            'https://frezz-laundry.vercel.app',
+        ];
+        if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
 }));
 app.use(express.json());
