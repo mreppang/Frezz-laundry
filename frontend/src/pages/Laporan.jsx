@@ -26,6 +26,33 @@ export default function Laporan() {
   const totalPendapatan = data.reduce((a, r) => a + Number(r.total_pendapatan || 0), 0);
   const totalTrx = data.reduce((a, r) => a + Number(r.jumlah_transaksi || 0), 0);
 
+  const exportCSV = () => {
+    if (data.length === 0) return;
+    const header = ['Tanggal', 'Jumlah Transaksi', 'Total Pendapatan'];
+    const rows = data.map(row => [
+      new Date(row.tanggal).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      row.jumlah_transaksi,
+      Number(row.total_pendapatan),
+    ]);
+    rows.push(['TOTAL', totalTrx, totalPendapatan]);
+
+    const csvContent = [header, ...rows]
+      .map(r => r.map(v => `"${v}"`).join(','))
+      .join('\n');
+
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Laporan_Pendapatan_${filters.dari}_sd_${filters.sampai}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('Laporan berhasil di-export!');
+  };
+
   return (
     <div>
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -33,7 +60,7 @@ export default function Laporan() {
           <h1 className="page-title">Laporan Pendapatan</h1>
           <p className="page-subtitle">Ringkasan pendapatan dari transaksi selesai</p>
         </div>
-        <button className="btn btn-outline" disabled><Download size={15} /> Export</button>
+        <button className="btn btn-outline" onClick={exportCSV} disabled={data.length === 0}><Download size={15} /> Export</button>
       </div>
 
       <div className="filter-row" style={{ marginBottom: 20 }}>
