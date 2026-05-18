@@ -54,6 +54,7 @@ router.get('/api/riwayat', auth, riwayat.getRiwayat);
 // ─────────────────────────────────────────────
 router.get('/api/laporan/dashboard',  auth, laporan.getDashboard);
 router.get('/api/laporan/pendapatan', auth, checkRole('owner'), laporan.getLaporan);
+router.get('/api/laporan/export',     auth, checkRole('owner'), laporan.getExportDetail);
 
 // ─────────────────────────────────────────────
 // PENGATURAN

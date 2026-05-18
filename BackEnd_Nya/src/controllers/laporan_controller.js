@@ -106,4 +106,40 @@ const getLaporan = async (req, res, next) => {
     }
 };
 
-module.exports = { getDashboard, getLaporan };
+// GET /api/laporan/export — detail per-transaksi untuk export CSV (owner only)
+const getExportDetail = async (req, res, next) => {
+    try {
+        const { dari, sampai } = req.query;
+        const params = [];
+        let paramIdx = 1;
+
+        let query = `
+            SELECT t.kode_order, p.nama AS pelanggan_nama, p.no_hp AS pelanggan_hp,
+                   t.layanan, t.paket, t.berat_kg, t.total_harga,
+                   u.username AS kasir_nama,
+                   t.tanggal_masuk, r.selesai_at
+            FROM riwayat r
+            JOIN transaksi t ON r.transaksi_id = t.id
+            LEFT JOIN pelanggan p ON t.pelanggan_id = p.id
+            LEFT JOIN users u ON t.created_by = u.id
+            WHERE 1=1
+        `;
+
+        if (dari) {
+            query += ` AND DATE(r.selesai_at) >= $${paramIdx++}`;
+            params.push(dari);
+        }
+        if (sampai) {
+            query += ` AND DATE(r.selesai_at) <= $${paramIdx++}`;
+            params.push(sampai);
+        }
+        query += ' ORDER BY r.selesai_at ASC';
+
+        const result = await db.execute(query, params);
+        return res.status(200).json({ message: 'OK', data: result.rows });
+    } catch (error) {
+        next(error);
+    }
+};
+
+module.exports = { getDashboard, getLaporan, getExportDetail };
